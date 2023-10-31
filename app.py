@@ -5,8 +5,8 @@ import base64
 
 st.set_page_config(layout="wide", page_title="# MS AI SCHOOL")
 
-st.write("## MS AI SCHOOL : AI 생활 폐기물 분류 시스템")
-st.write(": Upload your trash Image :fire:")
+st.write("# MS AI SCHOOL 1조 : AI 생활 폐기물 분류 시스템")
+st.write(": ## Upload your trash Image :fire:")
 
 st.sidebar.write("## Upload and Download :gear:")
 
