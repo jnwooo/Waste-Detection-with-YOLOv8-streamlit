@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 from io import BytesIO
 import base64
+import cv2  # OpenCV 라이브러리를 가져옵니다.
 
 st.set_page_config(layout="wide", page_title="# MS AI SCHOOL")
 
@@ -24,11 +25,15 @@ def fix_image(upload):
     col1.write("Original Image :camera:")
     col1.image(image)
 
-    col2.write("detected Image :wrench:")
-    col2.image(image)
-    st.sidebar.markdown("\n")
-    st.sidebar.download_button("Download detected image", convert_image(image), "bbox.png", "image/png")
+    # 이미지를 좌우 반전합니다.
+    image_cv2 = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)  # PIL 이미지를 OpenCV 형식으로 변환합니다.
+    flipped_image = cv2.flip(image_cv2, 1)  # 이미지를 좌우로 반전시킵니다.
+    flipped_image_pil = Image.fromarray(cv2.cvtColor(flipped_image, cv2.COLOR_BGR2RGB))  # 다시 PIL 형식으로 변환합니다.
+    col2.write("Detected Image :wrench (Flipped):")  # 좌우 반전한 이미지를 표시합니다.
+    col2.image(flipped_image_pil)
 
+    st.sidebar.markdown("\n")
+    st.sidebar.download_button("Download detected image", convert_image(flipped_image_pil), "bbox.png", "image/png")
 
 col1, col2 = st.columns(2)
 
