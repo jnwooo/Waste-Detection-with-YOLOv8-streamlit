@@ -4,3 +4,6 @@ pandas
 torch
 opencv-python-headless
 Pillow
+io
+base64
+matplotlib
