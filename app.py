@@ -1,13 +1,16 @@
 import streamlit as st
+import os
 from PIL import Image
 from io import BytesIO
 import base64
 import cv2  # OpenCV 라이브러리를 가져옵니다.
+import numpy as np
+import matplotlib.pyplot as plt
 
 st.set_page_config(layout="wide", page_title="# MS AI SCHOOL")
 
 st.write("# MS AI SCHOOL 1조 : AI 생활 폐기물 분류 시스템")
-st.write(": ## Upload your trash Image :fire:")
+st.write("## : Upload your trash Image :fire:")
 
 st.sidebar.write("## Upload and Download :gear:")
 
@@ -29,7 +32,7 @@ def fix_image(upload):
     image_cv2 = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)  # PIL 이미지를 OpenCV 형식으로 변환합니다.
     flipped_image = cv2.flip(image_cv2, 1)  # 이미지를 좌우로 반전시킵니다.
     flipped_image_pil = Image.fromarray(cv2.cvtColor(flipped_image, cv2.COLOR_BGR2RGB))  # 다시 PIL 형식으로 변환합니다.
-    col2.write("Detected Image :wrench (Flipped):")  # 좌우 반전한 이미지를 표시합니다.
+    col2.write("Detected Image :wrench:")  # 좌우 반전한 이미지를 표시합니다.
     col2.image(flipped_image_pil)
 
     st.sidebar.markdown("\n")
