@@ -22,7 +22,7 @@ st.set_page_config(
 )
 
 # Main page heading
-st.title("## AI 생활 폐기물 분류 시스템 :star:")
+st.title("AI 생활 폐기물 분류 시스템 :star:")
 
 # Sidebar header
 st.sidebar.header("Upload trash images or Videos :fire:")
@@ -103,11 +103,11 @@ if source_radio == settings.IMAGE:
                     st.error("No objects detected in the image.")
                 else:
                     res_plotted = res[0].plot()[:, :, ::-1]
-                    st.write("EX) Detected Image :wrench:")
+                    st.write("Detected Image :wrench:")
                     st.image(res_plotted, caption='Detected Image',
                             use_column_width=True) 
                     st.sidebar.markdown("\n")
-                    st.sidebar.download_button("Download detected image", convert_image(res_plotted), "Detected Image.png", "image/png")
+                    st.sidebar.download_button("Download detected image", convert_image(PIL.Image.fromarray(res_plotted)), "Detected Image.png", "image/png")
                     try:
                         with st.expander("Detection Results"):
                             for box in boxes:
