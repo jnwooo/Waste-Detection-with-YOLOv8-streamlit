@@ -28,7 +28,7 @@ st.sidebar.header("Upload trash images or Videos :fire:")
 
 # Model Options
 model_type = st.sidebar.radio(
-    "Object detection", ['YOLOv8m','YOLOv8s'])
+    "Choose Object detection Models", ['YOLOv8m','YOLOv8s'])
 
 
 # Sidebar slider
