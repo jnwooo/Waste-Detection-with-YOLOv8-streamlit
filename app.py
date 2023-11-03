@@ -107,7 +107,7 @@ if source_radio == settings.IMAGE:
                     st.image(res_plotted, caption='Detected Image',
                             use_column_width=True) 
                     st.sidebar.markdown("\n")
-                    st.sidebar.download_button("Download fixed image", convert_image(Detected Image), "Detected Image.png", "image/png")
+                    st.sidebar.download_button("Download detected image", convert_image(res_plotted), "Detected Image.png", "image/png")
                     try:
                         with st.expander("Detection Results"):
                             for box in boxes:
