@@ -28,7 +28,7 @@ st.sidebar.header("Upload trash images or Videos :fire:")
 
 # Model Options
 model_type = st.sidebar.radio(
-    "Object detection", ['Detection'])
+    "Object detection", ['YOLOv8m','YOLOv8s'])
 
 
 # Sidebar slider
@@ -37,7 +37,7 @@ confidence = float(st.sidebar.slider(
 
 
 # Selecting Detection Or Segmentation
-if model_type == 'Detection':
+if model_type == 'YOLOv8m':
     model_path = Path(settings.DETECTION_MODEL)
 
 
