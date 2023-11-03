@@ -39,6 +39,9 @@ confidence = float(st.sidebar.slider(
 # Selecting Detection Or Segmentation
 if model_type == 'YOLOv8m':
     model_path = Path(settings.DETECTION_MODEL)
+elif model_type == 'YOLOv8s':
+    model_path = Path(settings.DETECTION_MODEL_S)
+
 
 
 # Load Pre-trained ML Model
