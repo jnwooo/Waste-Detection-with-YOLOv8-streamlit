@@ -90,3 +90,5 @@ zipp==3.16.2
 omegaconf==2.3.0
 easyocr==1.7.0
 imageio==2.31.5
+rembg==2.0.50
+numba==0.57
