@@ -44,7 +44,7 @@ VIDEOS_DICT = {
 
 # ML Model config
 MODEL_DIR = ROOT / 'weights'
-DETECTION_MODEL_M = MODEL_DIR / 'best_m.pt'
+DETECTION_MODEL_M = MODEL_DIR / 'best.pt'
 DETECTION_MODEL_S = MODEL_DIR / 'best_s.pt'
 
 # Webcam
