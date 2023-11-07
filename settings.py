@@ -22,6 +22,20 @@ YOUTUBE = 'YouTube'
 
 SOURCES_LIST = [IMAGE, VIDEO]
 
+real_names = {
+    0 : 'Paper',
+    1 : 'Can',
+    2 : 'Glass',
+    3 : 'Pet',
+    4 : 'Plastic',
+    5 : 'Vinyl',
+    6 : 'Styrofoam',
+    7 : 'Battery',
+    8 : 'Can(foreign)',
+    9 : 'Glass(foreign)',
+    10 : 'Pet(foreign)'
+}
+
 # Images config
 IMAGES_DIR = ROOT / 'images'
 DEFAULT_IMAGE = IMAGES_DIR / 'A2C1.png'
@@ -46,6 +60,8 @@ VIDEOS_DICT = {
 MODEL_DIR = ROOT / 'weights'
 DETECTION_MODEL = MODEL_DIR / 'best.pt'
 DETECTION_MODEL_S = MODEL_DIR / 'best_S.pt'
+
+
 
 # Webcam
 WEBCAM_PATH = 0
