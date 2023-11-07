@@ -32,26 +32,4 @@ def _display_detected_frames(conf, model, st_frame, image, is_display_tracking=N
                    use_column_width=True
                    )
     
-def play_stored_video(conf, model):
-    source_vid = st.sidebar.selectbox("Choose a video...", settings.VIDEOS_DICT.keys())
-    is_display_tracker = display_tracker_options()
-    with open(settings.VIDEOS_DICT.get(source_vid), 'rb') as video_file:
-        video_bytes = video_file.read()
-    if video_bytes:
-        st.video(video_bytes, format='video/MP4')
-    if st.sidebar.button('Detect Video Objects'):
-        try:
-            vid_cap = cv2.VideoCapture(str(settings.VIDEOS_DICT.get(source_vid)))
-            st_frame = st.empty()
-            frame_skip = 2  # Skip every N frames for faster playback
-            while vid_cap.isOpened():
-                for i in range(frame_skip):
-                    vid_cap.read()
-                success, image = vid_cap.read()
-                if success:
-                    _display_detected_frames(conf, model, st_frame, image, is_display_tracker)
-                else:
-                    vid_cap.release()
-                    break
-        except Exception as e:
-            st.sidebar.error("Error loading video: " + str(e))
+
