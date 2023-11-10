@@ -36,7 +36,6 @@ st.sidebar.header("Upload trash images or Videos :fire:")
 model_type = st.sidebar.radio(
     "Choose Object detection Models", ['YOLOv8m','YOLOv8s'])
 
-
 # Sidebar slider
 confidence = float(st.sidebar.slider(
     "Select Model Confidence", 25, 100, 40)) / 100
@@ -55,11 +54,6 @@ def convert_image(img):
     byte_im = buf.getvalue()
     return byte_im
 
-def convert_video(vid):
-    buf = BytesIO()
-    vid.save(buf, format="MP4")
-    byte_im = buf.getvalue()
-    return byte_im
 
 # Load Pre-trained YOLO8 Model
 try:
@@ -118,7 +112,8 @@ if source_radio == settings.IMAGE:
                 st.write("Detected Image :wrench:")
                 st.image(res_plotted, caption='Detected Image', use_column_width=True)
                 st.sidebar.markdown("\n")
-                st.sidebar.download_button("Download detected image", convert_image(PIL.Image.fromarray(res_plotted)), "Detected Image.png", "image/png")
+                st.sidebar.download_button("Download detected image", 
+                                           convert_image(PIL.Image.fromarray(res_plotted)), "Detected Image.png", "image/png")
                 
                 try:
                     col1, col2 = st.columns(2)
@@ -132,7 +127,6 @@ if source_radio == settings.IMAGE:
                             
                             if len(labels) > 0:
                                 labels = [settings.real_names[float(l)] for l in labels]
-                                # 각 클래스별로 몇개가 검출되었는지 출력
                                 c = Counter(labels)
                                 for label, count in c.items():
                                     st.write(f"{label} : {count}개")
@@ -143,56 +137,73 @@ if source_radio == settings.IMAGE:
 
 
 elif source_radio == settings.VIDEO:
-    st.write("")
-    st.write("EX) Choose Videos :camera:")    
-
-    # 기본 비디오 선택
-    defaulted_video = st.selectbox("Choose a video for check the Model", settings.VIDEOS_DICT.keys())
+    
+    defaulted_video = st.sidebar.selectbox("Choose a video for check the Model", settings.VIDEOS_DICT.keys())
+    source_video = st.sidebar.file_uploader("Choose a video...", type=["mp4", "avi", "mov"])
     is_display_tracker = helper.display_tracker_options()
 
-    with open(settings.VIDEOS_DICT.get(defaulted_video), 'rb') as video_file:
-        video_bytes = video_file.read()
+    col1, col2 = st.columns(2)
+    detect_button_clicked = st.sidebar.button('Detect button')
 
-    # 기본 비디오에서 객체 감지
-    if st.button('EX Detect Video'):
-        
+    with col1:
         try:
-            st.write("EX) Detected Videos :wrench:")
-            vid_cap = cv2.VideoCapture(str(settings.VIDEOS_DICT.get(defaulted_video)))
-            st_frame = st.empty()
-            while vid_cap.isOpened():
-                success, frame = vid_cap.read()
-                if success:
-                    helper._display_detected_frames(confidence, model, st_frame, frame, is_display_tracker)
-                else:
-                    vid_cap.release()
-                    break
-        except Exception as e:
-            st.error("Error loading default video: " + str(e))
-        
+            if source_video is None:
+                st.write("")
+                st.write("EX) Default video :camera:") 
+                with open(settings.VIDEOS_DICT.get(defaulted_video), 'rb') as video_file:
+                    video_bytes = video_file.read()
+                    if video_bytes:
+                        st.video(video_bytes, format='video/MP4')
+            else:
+                st.write("Uploaded Video :camera:")
+                st.video(source_video, format="video/mp4", start_time=0)
 
-    # 업로드한 비디오 선택
-    source_video = st.sidebar.file_uploader("choose a video...", type=["mp4", "avi", "mov"])
-    if source_video is not None:
-        st.write("Detected Videos :wrench:")
+                
+        except Exception as ex:
+            st.error("Error occurred while opening the Video.")
+            st.error(ex)
 
+    with col2:
         try:
-            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-                temp_file.write(source_video.read())
-                temp_file_path = temp_file.name
+            if source_video is None:
+                if detect_button_clicked:
+                    try:
+                        st.write("")
+                        st.write("EX) Detected Videos :wrench:")
+                        vid_cap = cv2.VideoCapture(str(settings.VIDEOS_DICT.get(defaulted_video)))
+                        st_frame = st.empty()
+                        while vid_cap.isOpened():
+                            success, frame = vid_cap.read()
+                            if success:
+                                helper._display_detected_frames(confidence, model, st_frame, frame, is_display_tracker)
+                            else:
+                                vid_cap.release()
+                                break
+                    except Exception as e:
+                        st.error("Error loading default video: " + str(e))
+            else:
+                # st.write("")
+                st.write("Detected Videos :wrench:")
+                if detect_button_clicked:
+                    try:
+                        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                            temp_file.write(source_video.read())
+                            temp_file_path = temp_file.name
 
-            vid_cap = cv2.VideoCapture(temp_file_path)
-            st_frame = st.empty()
- 
-            while vid_cap.isOpened():
-                success, frame = vid_cap.read()
-                if success:
-                    helper._display_detected_frames(confidence, model, st_frame, frame, is_display_tracker)
-                    # st.sidebar.download_button('Download Video', helper._display_detected_frames(confidence, model, st_frame, frame, is_display_tracker), 'video.mp4', 'video/mp4')
-                else:
-                    vid_cap.release()
-                    break
+                        vid_cap = cv2.VideoCapture(temp_file_path)
+                        st_frame = st.empty()
+            
+                        while vid_cap.isOpened():
+                            success, frame = vid_cap.read()
+                            if success:
+                                helper._display_detected_frames(confidence, model, st_frame, frame, is_display_tracker)
+                            else:
+                                vid_cap.release()
+                                break
+                    except Exception as e:
+                        st.error("Error loading uploaded video: " + str(e))
         except Exception as e:
-            st.error("Error loading uploaded video: " + str(e))
+                    st.error("Error loading uploaded video: " + str(e))
+
 else:
     st.error("Please select a valid source type!")
